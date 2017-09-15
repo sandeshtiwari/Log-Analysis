@@ -17,4 +17,6 @@ rows = c.fetchall()
 for row in rows:
     print(row[0]+" -- "+str(row[1])+" views")
 print("\n")
+
+c.execute("create view dateRecord as select status, cast(substring(cast(time as text),1,11) as date) as date from log")
 db.close()
