@@ -19,4 +19,5 @@ for row in rows:
 print("\n")
 
 c.execute("create view dateRecord as select status, cast(substring(cast(time as text),1,11) as date) as date from log")
+c.execute("create view totalCount as select date , count(date) from dateRecord group by date")
 db.close()
