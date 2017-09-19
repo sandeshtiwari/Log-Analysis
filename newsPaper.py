@@ -54,17 +54,16 @@ c.execute("""
     group by date
     """)
 c.execute("""
-    select totalCount.date, totalCount.count as total,errorCount.count as errors
+    select totalCount.date,
+        100.0 * errorCount.count / totalCount.count as errorPer
     from totalCount join errorCount
     on errorCount.date = totalCount.date
+    where 100.0 * errorCount.count / totalCount.count > 1.0
+    order by totalCount.date
     """)
 rows = c.fetchall()
 print("Dates with more than 1% errors:-\n")
 for row in rows:
-    totalViews = float(row[1])
-    errorViews = float(row[2])
-    errorPer = (errorViews/totalViews) * 100
-    if errorPer > 1.0:
-        print(str(row[0]) + " -- " + str(round(errorPer,2)) + "%")
+        print(str(row[0]) + " -- " + str(round(row[1],2)) + "%")
 print("\n")
 db.close()
