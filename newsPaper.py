@@ -40,21 +40,17 @@ for row in rows:
     print(row[0] + " -- " + str(row[1])+" views")
 print("\n")
 
-c.execute("""
-    create view dateRecord as
-    select status, cast(substring(cast(time as text),1,11) as date)
-        as date
-    from log
-    """)
+
 c.execute("""
     create view totalCount as
-    select date , count(date)
-    from dateRecord group by date
+    select date(time) as date , count(*)
+    from log
+    group by date
     """)
 c.execute("""
     create view errorCount as
-    select date, count(status)
-    from dateRecord where status != '200 OK'
+    select date(time) as date, count(status)
+    from log where status != '200 OK'
     group by date
     """)
 c.execute("""
