@@ -16,9 +16,9 @@ Software and other requirements:-
 	-Run the following command to setup the database :- psql -d news -f newsdata.sql
 	-Following queries needs to be run before running the newsPaper.py file to create all the views required:-
 		-create view shortLogs as select substring(path,10) as slugPath, count(path) as num from log where path like '/article/%' group by path order by num desc
-		-create view authorArticles as select articles.author, shortLog.slugPath, shortLogs.num from articles join shortLogs on articles.slug = shortLogs.slugPath
-		-create view totalCount as select date , count(date) from dateRecord group by date
-		-create view errorCount as select date, count(status) from dateRecord where status != '200 OK' group by date
+		-create view authorArticles as select articles.author, shortLogs.slugPath, shortLogs.num from articles join shortLogs on articles.slug = shortLogs.slugPath
+		-create view totalCount as select date(time) as date , count(*) from log group by date
+		-create view errorCount as select date(time) as date, count(status) from log where status != '200 OK' group by date
 How to run this program?
 -After completing all the above instructions run the following command in your directory where you have saved the newsPaper.py file
 	-python newsPaper.py
