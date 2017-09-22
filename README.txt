@@ -12,7 +12,8 @@ Software and other requirements:-
 		-Change to this directory in your terminal(Git Bash for Windows) and run the following commands:-
 			-vagrant up - this will download the linux OS and install it.
 			-vagrant ssh- to get the virtual terminal for linux
-	-Download the newsdata.sql file and put this in the vagrant directory
+	-Download the newsdata.sql file and put this in the vagrant directory from this link
+		-https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip
 	-Run the following command to setup the database :- psql -d news -f newsdata.sql
 	-Following queries needs to be run before running the newsPaper.py file to create all the views required:-
 		-create view shortLogs as select substring(path,10) as slugPath, count(path) as num from log where path like '/article/%' group by path order by num desc
