@@ -15,15 +15,17 @@ def database_work(query):
 
 def get_top_articles():
     query = ("""
-    select articles.title, shortLogs.num
-    from articles join shortLogs on articles.slug = shortLogs.slugPath
-    limit 3
+    select title, count(*) as views
+       from log join articles
+       on log.path = concat('/article/', articles.slug)
+       group by title
+       order by views desc
+       limit 3;
     """)
     result = database_work(query)
-    print("\nMost famous articles are:-\n")
+    print("\nMost famous articles are:-")
     for article, views in result:
-        print("{} -- {} views".format(article, views))
-    print("\n")
+        print("\t"+"{} -- {} views".format(article, views))
 
 
 def get_top_authors():
@@ -34,10 +36,9 @@ def get_top_authors():
     group by authors.name order by n desc
     """)
     result = database_work(query)
-    print("Most famous authors:-\n")
+    print("Most famous authors:-")
     for author, views in result:
-        print("{} -- {} views".format(author, views))
-    print("\n")
+        print("\t"+"{} -- {} views".format(author, views))
 
 
 def get_error_per():
@@ -50,13 +51,16 @@ def get_error_per():
     order by totalCount.date
     """)
     result = database_work(query)
-    print("Dates with more than 1% errors:-\n")
+    print("Dates with more than 1% errors:-")
     for date, errorPer in result:
-        print(str(date) + " -- " + str(round(errorPer, 2)) + "%")
-    print("\n")
+        print("\t"+str(date) + " -- " + str(round(errorPer, 2)) + "%")
+    
 
 
 if __name__ == "__main__":
     get_top_articles()
+    print("-"*50+"\n")
     get_top_authors()
+    print("-"*50+"\n")
     get_error_per()
+    print("\n")
